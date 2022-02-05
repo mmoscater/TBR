@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+    <html>
+        <head>
+            <link
+                href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
+                rel="stylesheet"
+                integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC"
+                crossorigin="anonymous">
+        </head>
+        <body>
+            <div class="navbar-nav navbar-dark bg-dark">
+
+                <div class="container-fluid text-center">
+                    <h2 class='display-5 text-light'>{{ player.fullName }} - {{
+                        player.name }}</h2>
+                </div>
+            </div>
+            <div class="container-fluid">
+                <div class=row>
+                    <div class='col-3'>
+                        {% if player.position == 'P' %}
+                        <img src="/static/player_photo/pitcher.png"
+                            class='img-fluid'>
+                        {% else %}
+                        <img src="/static/player_photo/batter.png"
+                            class='img-fluid'>
+                        {% endif %}
+                    </div>
+                    <div class='col bg-light'>
+                        <div class='row text-center'>
+                            <h3>Player Information</h3>
+                        </div>
+                        <div class="row">
+                            <div class="col-4">
+                                <p>Position:</p>
+                            </div>
+                            <div class="col-2">
+                                <p>{{ player.position }} </p>
+                            </div>
+                            <div class="col-4">
+                                <p>Birth Date:</p>
+                            </div>
+                            <div class="col-2">
+                                <p>{{ player.birthDate }}</p>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-4">
+                                <p>MLB Debut:</p>
+                            </div>
+                            <div class="col-2">
+                            {% if player.mlbDebutDate %}
+                                <p>{{ player.mlbDebutDate }}</p>
+                            {% else %}
+                                <p>N/A</p>
+                            {% endif %}
+                            </div>
+                            <div class="col-4">
+                                <p>Height:</p>
+                            </div>
+                            <div class="col-2">
+                                <p>{{ player.height }}</p>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-4">
+                                <p>League:</p>
+                            </div>
+                            <div class="col-2">
+                                <p>{{ player.abbreviation }}</p>
+                            </div>
+                            <div class="col-4">
+                                <p>Weight:</p>
+                            </div>
+                            <div class="col-2">
+                                <p>{{ player.weight }} lbs</p>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-4">
+                                <p>Bats/Throws:</p>
+                            </div>
+                            <div class="col-2">
+                                <p>{{ player.batSide }}/{{ player.pitchHand }}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="container">
+                        <div class="row text-center">
+                            {% if player.position == 'P' %}
+                            <h3>Pitching Statistics</h3>
+                            {% else %}
+                            <h3>Batting Statistics</h3>
+                            {% endif %}
+                        </div>
+                        <div class="container-fluid">
+                            {% if player.position == 'P' %}
+                            <table class='table table-striped'>
+                                <thead>
+                                    <tr>
+                                        <th scope="col">Season</th>
+                                        <th scope="col">Team</th>
+                                        <th scope="col">Games</th>
+                                        <th scope="col">ERA</th>
+                                        <th scope="col">IP</th>
+                                        <th scope="col">Wins</th>
+                                        <th scope="col">Saves</th>
+                                        <th scope="col">WHIP</th>
+                                        <th scope="col">K/9</th>
+                                        <th scope="col">K %</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for p in pitching | sort(attribute=season, reverse=True) %}
+                                    <tr>
+                                        <th scope='row'>{{ p.season }}</th>
+                                        <td>{{ p.teamCode }}</td>
+                                        <td>{{ p.gamesPitched }}</td>
+                                        <td>{{ p.era }}</td>
+                                        <td>{{ p.inningsPitched }}</td>
+                                        <td>{{ p.wins }}</td>
+                                        <td>{{ p.saves }}</td>
+                                        <td>{{ p.whip }}</td>
+                                        <td>{{ p.strikeoutsPer9Inn }}</td>
+                                        <td>{{ p.strikePercentage }}</td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                            {% else %}
+                            <table class='table table-striped'>
+                                <thead>
+                                    <tr>
+                                        <th scope="col">Season</th>
+                                        <th scope="col">Team</th>
+                                        <th scope="col">Games</th>
+                                        <th scope="col">Hits</th>
+                                        <th scope="col">HR</th>
+                                        <th scope="col">AVG</th>
+                                        <th scope="col">OBP</th>
+                                        <th scope="col">SLG</th>
+                                        <th scope="col">OPS</th>
+                                        <th scope="col">RBI</th>
+                                        <th scope="col">Runs</th>
+                                        <th scope="col">SB</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for h in hitting | sort(attribute=season, reverse=True) %}
+                                    <tr>
+                                        <th scope='row'>{{ h.season }}</th>
+                                        <td>{{ h.teamCode }}</td>
+                                        <td>{{ h.gamesPlayed }}</td>
+                                        <td>{{ h.hits }}</td>
+                                        <td>{{ h.homeRuns }}</td>
+                                        <td>{{ h.avg }}</td>
+                                        <td>{{ h.obp }}</td>
+                                        <td>{{ h.slg }}</td>
+                                        <td>{{ h.ops }}</td>
+                                        <td>{{ h.rbi }}</td>
+                                        <td>{{ h.runs }}</td>
+                                        <td>{{ h.stolenBases }}</td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </body>
+    </html>
